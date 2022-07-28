@@ -1,6 +1,6 @@
 import java.sql.*;
 
-public class ClienteDAOImp implements ClienteDAO {
+public class ClienteDAOImpl implements ClienteDAO {
     private Statement createStatement(Connection connection) {
         try {
             return connection.createStatement();
@@ -27,11 +27,11 @@ public class ClienteDAOImp implements ClienteDAO {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("CREATE TABLE IF NOT EXISTS CLIENTE (");
-        stringBuilder.append("id integer PRIMARY KEY,");
+        stringBuilder.append("id integer PRIMARY KEY AUTOINCREMENT,");
         stringBuilder.append("nome varchar(100),");
         stringBuilder.append("idade integer,");
         stringBuilder.append("cpf varchar(15),");
-        stringBuilder.append("rg varchar(15),");
+        stringBuilder.append("rg varchar(15)");
         stringBuilder.append(");");
 
         try(Connection connection = connect(urlConexao)) {
@@ -79,14 +79,13 @@ public class ClienteDAOImp implements ClienteDAO {
     @Override
     public void insert(String urlConexao, Cliente cliente) {
         try(Connection connection = connect(urlConexao)) {
-            String sql = "INSERT INTO CLIENTE (id, nome, idade, cpf, rg) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO CLIENTE (nome, idade, cpf, rg) VALUES (?, ?, ?, ?)";
 
             try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setInt(1, cliente.getId());
-                preparedStatement.setString(2, cliente.getNome());
-                preparedStatement.setInt(3, cliente.getIdade());
-                preparedStatement.setString(4, cliente.getCpf());
-                preparedStatement.setString(5, cliente.getRg());
+                preparedStatement.setString(1, cliente.getNome());
+                preparedStatement.setInt(2, cliente.getIdade());
+                preparedStatement.setString(3, cliente.getCpf());
+                preparedStatement.setString(4, cliente.getRg());
 
                 preparedStatement.execute();
             }
@@ -98,13 +97,12 @@ public class ClienteDAOImp implements ClienteDAO {
     @Override
     public void update(String urlConexao, int id, String name, Integer idade) {
         try(Connection connection = connect(urlConexao)) {
-            String sql = "UPDATE CLIENTE SET id = (?), nome = (?), idade = (?) WHERE id = (?)";
+            String sql = "UPDATE CLIENTE SET nome = (?), idade = (?) WHERE id = (?)";
 
             try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setInt(1, id);
-                preparedStatement.setString(2, name);
-                preparedStatement.setInt(3, idade);
-                preparedStatement.setInt(4, id);
+                preparedStatement.setString(1, name);
+                preparedStatement.setInt(2, idade);
+                preparedStatement.setInt(3, id);
 
                 preparedStatement.executeUpdate();
             }
