@@ -1,7 +1,6 @@
 package models;
 
 import entities.Aluno;
-import entities.Curso;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
